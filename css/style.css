@@ -24,7 +24,37 @@
   gap: 20px;
   padding: 20px;
 }
+.navbar
+{
+  height:60px;
+  display: flex;
+  flex-direction: row;
+  align-items: left;          /* 3. 로고와 메뉴를 세로 중앙에 맞춤 */
+  padding: 0 20px;
+}
+.nav-links
+{
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  width:400px;
+  overflow: hidden;
+  max-height: 0; /* 높이를 0으로 만들어 숨김 */
+  transition: max-height 0.5s ease-out; /* 부드러운 슬라이드 효과 */
+}
+/* 활성화 상태: 클릭 시 이 클래스가 추가됨 */
+.nav-links.active {
+  max-height: 20px; /* 메뉴가 다 보일 정도의 충분한 높이 */
+}
 
+.logo {
+  height: 100%; /* 네비게이션 바 높이의 80%만큼 차지 */
+}
+
+.logo img {
+  height: 100%; /* 부모(.logo) 높이의 100% 차지 */
+  width: auto;  /* 가로 비율은 원본에 맞춰서 자동으로 계산 */
+}
 @media (min-width: 768px) {
   .project-grid {
     grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
@@ -90,4 +120,72 @@ section.about {
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+#scrollTopBtn {
+  position: fixed;    /* 화면에 고정 */
+  bottom: 30px;       /* 바닥에서 30px 띄움 */
+  right: 30px;        /* 오른쪽에서 30px 띄움 */
+  display: none;      /* 처음에는 숨겨둠 (스크롤 내려가면 보이게) */
+  z-index: 99;        /* 다른 요소보다 위에 보이게 */
+  /* 스타일링 */
+  padding: 10px 15px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#hero
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+}
+.typing-container {
+  width: fit-content; /* 이 박스가 글자만큼만 딱 줄어듭니다 */
+  flex: 0 0 auto;     /* 상위 Flex 레이아웃에서 공간 고정 */
+}
+.typing-container {
+  display: flex;
+  flex-direction: column; /* 위에서 아래로 순서대로 */
+}
+
+.typing-item {
+  width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid transparent; /* 커서 기본값 투명 */
+  font-family: monospace;
+  
+  /* 애니메이션: 이름 / 지속시간 / 타이밍함수 / 채우기모드(끝난후상태유지) */
+  animation: typing 2s steps(20) forwards;
+}
+
+/* --- 핵심: 각 항목마다 지연 시간(delay) 설정 --- */
+
+.item1 {
+  animation-delay: 0s; /* 즉시 시작 */
+  border-right-color: orange; /* 커서 보이기 */
+}
+
+.item2 {
+  animation-delay: 2s; /* item1이 끝나는 2초 뒤에 시작 */
+}
+
+.item3 {
+  animation-delay: 4s; /* item1(2s) + item2(2s) 가 끝난 4초 뒤 시작 */
+}
+
+/* 타이핑 애니메이션 */
+@keyframes typing {
+  from { 
+    width: 0; 
+    border-right-color: orange; /* 시작할 때 커서 보임 */
+  }
+  to { 
+    width: 100%; /* 또는 각 글자 수에 맞춰 ch 단위 사용 */
+    border-right-color: transparent; /* 끝나면 커서 숨김 (선택사항) */
+  }
 }

@@ -8,11 +8,6 @@ if (localStorage.getItem('dark-mode') == 'set') {document.body.classList.toggle(
     } else {
         themeToggle.textContent = '🌙'; // 라이트 모드일 때 달 아이콘
     }
-hamburger.addEventListener('click', () => {
-    // 3. 상태 변경 및 렌더링
-    navLinks.classList.toggle('active');
-});
-
 // 2. 이벤트 리스너 등록
 themeToggle.addEventListener('click', () => {
     // 3. body 태그에 'dark-mode' 클래스를 토글(없으면 넣고, 있으면 뺌)
