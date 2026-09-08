@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 포트폴리오</title>
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- JS 연결 (defer 속성 확인!) -->
+    <script src="js/script.js" defer></script>
+    <script src="js/project_script.js" defer></script>
+</head>
+<body>
+
+    <!-- 헤더: 로고와 네비게이션 -->
+    <header>
+        <nav>
+            <div class="logo">MyPortfolio</div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <!-- 다크모드 토글 버튼 (나중에 JS로 제어) -->
+            <button id="theme-toggle">🌙</button>
+            <!-- 햄버거 버튼 (모바일용) -->
+            <button class="hamburger">☰</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero 섹션: 첫 인상 -->
+        <section id="hero" class="section">
+            <h1>안녕하세요, [이름]입니다.</h1>
+            <p>프론트엔드 개발자를 꿈꾸는 학습자입니다.</p>
+            <a href="#projects" class="cta-btn">프로젝트 보기</a>
+        </section>
+
+        <!-- About 섹션: 자기소개 -->
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <img src="images/profile.jpg" alt="[이름]의 프로필 사진">
+                <p>여기에 본인의 소개글을 작성하세요.</p>
+                <!-- 감시할 요소들에 'reveal' 클래스를 붙여줍니다 -->
+            </div>
+            
+        </section>
+
+        <!-- Skills 섹션: 기술 스택 -->
+        <section id="skills" class="section">
+            <h2>My Skills</h2>
+            <ul class="skill-list">
+                <li>C</li>
+                <li>Python</li>
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>JavaScript</li>
+            </ul>
+        </section>
+
+        <!-- Projects 섹션: GitHub API 연동 예정 -->
+        <section id="projects" class="section">
+            <h2>Projects</h2>
+            <div id="language-container" class="language-flex-box">
+                <!-- JS가 여기에 버튼을 채워넣을 것임 -->
+            </div>
+            <!-- JS에서 데이터를 가져와 여기에 카드를 생성할 것입니다 -->
+            <div id="project-container" class="project-grid">
+                <p class="loading">프로젝트를 불러오는 중...</p>
+            </div>
+            <section class="reveal">첫 번째 섹션</section>
+<section class="reveal">두 번째 섹션</section>
+<section class="reveal">세 번째 섹션</section>
+        </section>
+
+        <!-- Contact 섹션: 문의 폼 -->
+        <section id="contact" class="section">
+            <h2>Contact Me</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">메시지</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" id="submit_form">보내기</button>
+                <p id="form-message"></p>
+            </form>
+        </section>
+    </main>
+
+    <!-- 푸터: 저작권 및 링크 -->
+    <footer>
+        <p>&copy; 2023 [이름]. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://github.com/bs7703">GitHub</a>
+        </div>
+    </footer>
+
+</body>
+</html>
