@@ -329,9 +329,9 @@ screenshots/
 - [x] Intersection Observer 활용
 - [x] JavaScript Form Validation
 - [x] 실제 Form 비동기 전송
-- [ ] GitHub Pages 최종 배포
-- [ ] Desktop / Mobile / Dark Mode 스크린샷 추가
-- [ ] 최종 배포 URL을 README에 반영
+- [x] GitHub Pages 최종 배포
+- [x] Desktop / Mobile / Dark Mode 스크린샷 추가
+- [x] 최종 배포 URL을 README에 반영
 
 ## 다음 학습 목표
 
