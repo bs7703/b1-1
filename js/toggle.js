@@ -3,73 +3,66 @@ const toggleBtn = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-links');
 const navbar = document.querySelector('.navbar');
 const scrollTopBtn = document.querySelector('#scrollTopBtn');
+const navLinks = document.querySelectorAll('.nav-links a');
 
-/**
- * 1. 테마 결정 로직
- */
 const getInitialTheme = () => {
-    // 사용자가 이전에 직접 설정한 값이 있는지 확인
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) return savedTheme;
-
-    // 시스템 설정이 다크모드인지 확인
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) return savedTheme;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
 
-// 초기 테마 적용
-const initialTheme = getInitialTheme();
-document.documentElement.setAttribute('data-theme', initialTheme);
-themeToggle.textContent = initialTheme === 'dark' ? '☀️' : '🌙';
+const applyTheme = (theme) => {
+  document.documentElement.setAttribute('data-theme', theme);
+  themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  themeToggle.setAttribute('aria-label', theme === 'dark' ? '라이트 모드 전환' : '다크 모드 전환');
+};
 
-/**
- * 2. 다크모드 토글 이벤트
- */
+applyTheme(getInitialTheme());
+
 themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme); // 사용자의 선택을 저장
-    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme);
+  applyTheme(newTheme);
 });
 
-/**
- * 3. 시스템 설정 변경 감지 (실시간 반영)
- * 사용자가 사이트 이용 중에 OS 설정을 바꾸면 즉시 반영됩니다.
- */
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    // 사용자가 수동으로 설정한 적이 없을 때만 시스템 설정을 따라감
-    if (!localStorage.getItem('theme')) {
-        const newTheme = e.matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-    }
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+  if (!localStorage.getItem('theme')) {
+    applyTheme(event.matches ? 'dark' : 'light');
+  }
 });
 
-/**
- * 4. 기타 네비게이션 및 스크롤 로직 (기존 유지)
- */
+const closeMobileMenu = () => {
+  navMenu.classList.remove('active');
+  toggleBtn.setAttribute('aria-expanded', 'false');
+  toggleBtn.setAttribute('aria-label', '메뉴 열기');
+};
+
 toggleBtn.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
+  const isOpen = navMenu.classList.toggle('active');
+  toggleBtn.setAttribute('aria-expanded', String(isOpen));
+  toggleBtn.setAttribute('aria-label', isOpen ? '메뉴 닫기' : '메뉴 열기');
 });
 
-window.addEventListener('scroll', () => {
-    // 네비게이션 바 스타일 변경        
-    if (window.scrollY > 60) {
-        navbar.classList.add("toggled");
-    } else {
-        navbar.classList.remove("toggled");
-    }
+navLinks.forEach((link) => link.addEventListener('click', closeMobileMenu));
 
-    // Top 버튼 표시
-    if (window.scrollY > 200) {
-        scrollTopBtn.style.display = 'block';
-    } else {
-        scrollTopBtn.style.display = 'none';
-    }
+document.addEventListener('click', (event) => {
+  if (window.innerWidth >= 768) return;
+  if (!navbar.contains(event.target)) closeMobileMenu();
 });
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 768) closeMobileMenu();
+});
+
+const handleScroll = () => {
+  navbar.classList.toggle('toggled', window.scrollY > 60);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 300);
+};
+
+window.addEventListener('scroll', handleScroll, { passive: true });
+handleScroll();
 
 scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });

@@ -1,91 +1,104 @@
 let allRepos = [];
-// 1. 내 깃허브 사용자명 설정
-const username = 'bs7703'; // 본인 아이디로 바꾸세요!
-async function fetchRepos(e) 
-{
-    if (e && e.preventDefault) e.preventDefault();
-    try
-    {
-    const response = await fetch(`https://api.github.com/users/${username}/repos`);
-    allRepos = await response.json(); // 데이터를 변수에 저장
-    renderProjects(allRepos); // 처음에 전체 출력
-    // 2. 데이터에서 언어 목록만 추출해서 버튼 만들기 (중요!)
+let selectedLanguage = 'All';
+const username = 'bs7703';
+
+const projectContainer = document.querySelector('#project-container');
+const languageContainer = document.querySelector('#language-container');
+
+const renderStatus = (type, message) => {
+  const retryButton = type === 'error'
+    ? '<button id="reload" class="btn btn-secondary" type="button">다시 시도</button>'
+    : '';
+
+  const spinner = type === 'loading' ? '<span class="spinner" aria-hidden="true"></span>' : '';
+
+  projectContainer.innerHTML = `
+    <div class="status-panel ${type}-state">
+      ${spinner}
+      <p>${message}</p>
+      ${retryButton}
+    </div>
+  `;
+
+  document.querySelector('#reload')?.addEventListener('click', fetchRepos);
+};
+
+async function fetchRepos(event) {
+  event?.preventDefault?.();
+  renderStatus('loading', '프로젝트를 불러오는 중입니다.');
+
+  try {
+    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+
+    if (!response.ok) {
+      const rateLimited = response.status === 403;
+      throw new Error(rateLimited ? 'GitHub API 호출 제한에 도달했습니다.' : `GitHub API 오류 (${response.status})`);
+    }
+
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error('예상하지 못한 응답 형식입니다.');
+
+    allRepos = data;
+    selectedLanguage = 'All';
     createFilterButtons(allRepos);
-    }
-    catch (error) {
+    renderProjects(allRepos);
+  } catch (error) {
     console.error(error);
-    const container = document.querySelector('.project-grid')
-    container.innerHTML = `
-            <p>프로젝트를 불러오는 중 오류가 발생했습니다.</p>
-            <button id="reload">다시 시도</button>
-        `;
-    const reload = document.querySelector("#reload")
-    reload.addEventListener('click', ()=>
-    {
-        fetchRepos();
-    }
-    )
-    }
-
+    renderStatus('error', error.message || '프로젝트를 불러올 수 없습니다.');
+  }
 }
+
 function createFilterButtons(repos) {
-  // 1. 모든 repo에서 language만 추출 (null 제외)
   const languages = repos
-    .map(repo => repo.language)
-    .filter((lang, index, self) => lang !== null && self.indexOf(lang) === index);
+    .map(({ language }) => language)
+    .filter(Boolean)
+    .filter((language, index, self) => self.indexOf(language) === index)
+    .sort();
 
-  // 2. 'All' 버튼을 포함한 전체 버튼 목록 생성
-  const buttonContainer = document.querySelector("#language-container");
-  
-  // 초기화 (중복 생성 방지)
-  const base = `<button class="filter-btn" data-lang="All">All</button>
-  `;
+  const buttons = ['All', ...languages]
+    .map((language) => `
+      <button class="filter-btn ${language === selectedLanguage ? 'active' : ''}" data-lang="${language}" type="button">
+        ${language}
+      </button>
+    `)
+    .join('');
 
-  // 3. 추출된 언어들로 버튼 추가
-  const languagehtml = languages.map(lang => {
-    return `<button class="filter-btn" data-lang="${lang}">${lang}</button>
-  `;
-  }).join('')
-  buttonContainer.innerHTML = base + languagehtml
+  languageContainer.innerHTML = buttons;
 }
 
 function filterProjects(language) {
-    // 1. Array.filter()를 사용하여 조건에 맞는 데이터만 추출
-    const filtered = (language === "All") 
-        ? allRepos 
-        : allRepos.filter(repo => repo.language === language);
+  selectedLanguage = language;
+  const filtered = language === 'All'
+    ? allRepos
+    : allRepos.filter(({ language: repoLanguage }) => repoLanguage === language);
 
-    // 2. 필터링된 결과만 화면에 다시 그리기
-    renderProjects(filtered);
+  createFilterButtons(allRepos);
+  renderProjects(filtered);
 }
 
 function renderProjects(reposToRender) {
-    if (reposToRender.length === 0) {
-        document.querySelector("#project-container").innerHTML = `<p>표시할 프로젝트가 없습니다.</p>`;
-        return;
-    }
-    const repoHTML = reposToRender.map(repo => {
-        return `
-    <article class="project-card">
-      <h3>${repo.name}</h3>
-      <p>${repo.description || '설명이 없습니다.'}</p>
-      <div class="tags">
-        <span class="tag">${repo.language || 'No Language'}</span>
-        <span class="stars">⭐ ${repo.stargazers_count}</span>
-      </div>
-      <a href="${repo.html_url}" target="_blank" class="view-link">View Project</a>
-    </article>
-        `;
-    }).join('');
+  if (reposToRender.length === 0) {
+    renderStatus('empty', '표시할 프로젝트가 없습니다.');
+    return;
+  }
 
-    document.querySelector("#project-container").innerHTML = repoHTML;
+  projectContainer.innerHTML = reposToRender.map(({ name, description, language, stargazers_count, html_url }) => `
+    <article class="project-card">
+      <h3>${name}</h3>
+      <p>${description || '설명이 없습니다.'}</p>
+      <div class="tags">
+        <span class="tag">${language || 'No Language'}</span>
+        <span class="stars">⭐ ${stargazers_count}</span>
+      </div>
+      <a href="${html_url}" target="_blank" rel="noopener noreferrer" class="view-link">View Project</a>
+    </article>
+  `).join('');
 }
 
-document.querySelector("#language-container").addEventListener("click", (e) => {
-    if (e.target.classList.contains("filter-btn")) {
-        e.preventDefault(); 
-        const selectedLang = e.target.dataset.lang;
-        filterProjects(selectedLang); // 필터  함수 호출!
-    }
+languageContainer.addEventListener('click', (event) => {
+  const button = event.target.closest('.filter-btn');
+  if (!button) return;
+  filterProjects(button.dataset.lang);
 });
-document.addEventListener('DOMContentLoaded', () => fetchRepos());
+
+document.addEventListener('DOMContentLoaded', fetchRepos);

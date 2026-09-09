@@ -1,138 +1,157 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나의 포트폴리오</title>
-    <!-- CSS 연결 -->
-    <link rel="stylesheet" href="css/variable.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/animation.css">
-    <!-- JS 연결 (defer 속성 확인!) -->
-    <script src="js/reveal.js" defer></script>
-    <script src="js/project_script.js" defer></script>
-    <script src="js/form.js" defer></script>
-    <script src="js/toggle.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI 개발자를 목표로 학습하고 있는 김상원의 포트폴리오입니다.">
+  <title>김상원 | AI Developer Portfolio</title>
+
+  <link rel="stylesheet" href="css/variable.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animation.css">
+
+  <script src="js/reveal.js" defer></script>
+  <script src="js/project_script.js" defer></script>
+  <script src="js/form.js" defer></script>
+  <script src="js/toggle.js" defer></script>
 </head>
 <body>
-
-    <!-- 헤더: 로고와 네비게이션 -->
   <header>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="#hero">
-                 <svg width="40" height="40" viewBox="0 0 100 100">
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#6366f1" />
-                            <stop offset="100%" style="stop-color:#ec4899" />
-                        </linearGradient>
-                    </defs>
-                    <rect x="20" y="20" width="60" height="60" rx="15" fill="url(#logoGrad)" />
-                    <path d="M40 65V35L65 50L40 65Z" fill="white" />
-                    <rect x="45" y="10" width="10" height="15" rx="5" fill="url(#logoGrad)" opacity="0.6" />
-                    <rect x="45" y="75" width="10" height="15" rx="5" fill="url(#logoGrad)" opacity="0.6" />
-                </svg>
-                <span class="logo-text">KSW AI</span>
-            </a>
-        </div>
+    <nav class="navbar" aria-label="주요 메뉴">
+      <a href="#hero" class="brand" aria-label="홈으로 이동">
+        <span class="brand-mark" aria-hidden="true">AI</span>
+        <span class="brand-text">KSW Portfolio</span>
+      </a>
 
-        <!-- 2. 메뉴 (모바일에서는 숨겨졌다가 햄버거 클릭 시 등장) -->
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+      <ul class="nav-links" id="primary-navigation">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
 
-        <!-- 3. 우측 컨트롤 (다크모드 + 햄버거) -->
-        <div class="nav-controls">
-            <button id="theme-toggle" aria-label="다크모드 토글">🌙</button>
-            <button class="hamburger" aria-label="메뉴 열기">☰</button>
-        </div>
+      <div class="nav-controls">
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="다크 모드 전환">🌙</button>
+        <button class="hamburger icon-btn" type="button" aria-label="메뉴 열기" aria-controls="primary-navigation" aria-expanded="false">☰</button>
+      </div>
     </nav>
-</header>
+  </header>
 
-    <main>
-        <!-- Hero 섹션: 첫 인상 -->
-        <section id="hero" class="section">
-            <div class="container typing-container">
-            <p class="typing-item item1">안녕하세요 코디세이의 ai개발자를 목표로하는 김상원입니다.</p>
-            <p class="typing-item item2">ai개발을 위해 첫번쨰 초기과정을 하고있습니다.</p>
-            <p class="typing-item item3">빠르게 초기과정을 마치고 심화과정을 목표로 하고있습니다.</p>
-            </div>
-            <a href="#projects" class="cta-btn">프로젝트 보기</a>
-        </section>
-
-        <!-- About 섹션: 자기소개 -->
-        <section id="about" class="section">
-            <h2>About Me</h2>
-            <div class="about-content">
-                <img src="logo.png" alt="나의 프로필 사진">
-                <p>여기에 본인의 소개글을 작성하세요.</p>
-                <!-- 감시할 요소들에 'reveal' 클래스를 붙여줍니다 -->
-            </div>
-            
-        </section>
-
-        <!-- Skills 섹션: 기술 스택 -->
-        <section id="skills" class="section">
-            <h2>My Skills</h2>
-            <ul class="skill-list">
-                <li>C</li>
-                <li>Python</li>
-                <li>HTML5</li>
-                <li>CSS3</li>
-                <li>JavaScript</li>
-            </ul>
-        </section>
-
-        <!-- Projects 섹션: GitHub API 연동 예정 -->
-        <section id="projects" class="section">
-            <h2>Projects</h2>
-            <div id="language-container" class="language-flex-box">
-                <!-- JS가 여기에 버튼을 채워넣을 것임 -->
-            </div>
-            <!-- JS에서 데이터를 가져와 여기에 카드를 생성할 것입니다 -->
-            <div id="project-container" class="project-grid">
-                <p class="loading">프로젝트를 불러오는 중...</p>
-            </div>
-            <section class="reveal">첫 번째 섹션</section>
-        <section class="reveal">두 번째 섹션</section>
-        <section class="reveal">세 번째 섹션</section>
-        </section>
-
-        <!-- Contact 섹션: 문의 폼 -->
-        <section id="contact" class="section">
-            <h2>Contact Me</h2>
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="name">이름</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">이메일</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">메시지</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit" id="submit_form">보내기</button>
-                <p id="form-message"></p>
-            </form>
-        </section>
-    </main>
-
-    <!-- 푸터: 저작권 및 링크 -->
-    <footer>
-        <p>&copy; 2026 nobody All rights reserved.</p>
-        <div class="social-links">
-            <a href="https://github.com/bs7703">GitHub</a>
+  <main>
+    <section id="hero" class="section hero-section">
+      <div class="container hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">LEARN · BUILD · IMPROVE</p>
+          <div class="typing-container" aria-label="자기소개">
+            <p class="typing-item item1">안녕하세요. AI 개발자를 목표로 하는 김상원입니다.</p>
+            <p class="typing-item item2">웹과 소프트웨어의 기초를 직접 구현하며 학습하고 있습니다.</p>
+            <p class="typing-item item3">작게 만들고, 이해하고, 다시 개선하는 과정을 중요하게 생각합니다.</p>
+          </div>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
+            <a href="#contact" class="btn btn-secondary">연락하기</a>
+          </div>
         </div>
-    </footer>
-  <button id="scrollTopBtn" title="위로 이동">Top</button>
+
+        <div class="hero-visual" aria-hidden="true">
+          <img src="images/logo.png" alt="" class="hero-logo">
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section reveal">
+      <div class="container split-layout">
+        <div class="section-heading">
+          <p class="eyebrow">ABOUT</p>
+          <h2>배우는 과정을 결과물로 남깁니다.</h2>
+        </div>
+        <div class="about-card">
+          <img src="images/logo.png" alt="Learn AI 로고" class="profile-image">
+          <div>
+            <p>Python, 자료구조, 알고리즘을 직접 구현하며 기초를 다졌고, 현재는 웹의 DOM, 이벤트, 상태, 비동기 흐름을 학습하고 있습니다.</p>
+            <p>단순히 동작하는 코드를 만드는 것보다, 왜 그렇게 동작하는지 설명할 수 있는 코드를 목표로 합니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section reveal">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">SKILLS</p>
+          <h2>현재 학습 중인 기술</h2>
+        </div>
+        <ul class="skill-list" aria-label="기술 스택">
+          <li>C</li>
+          <li>Python</li>
+          <li>HTML5</li>
+          <li>CSS3</li>
+          <li>JavaScript</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projects" class="section reveal">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">PROJECTS</p>
+          <h2>GitHub 프로젝트</h2>
+          <p>GitHub API에서 저장소 데이터를 불러와 현재 상태에 따라 화면을 다시 렌더링합니다.</p>
+        </div>
+
+        <div id="language-container" class="language-filter" aria-label="프로젝트 언어 필터"></div>
+        <div id="project-container" class="project-grid" aria-live="polite">
+          <div class="status-panel loading-state" role="status">
+            <span class="spinner" aria-hidden="true"></span>
+            <p>프로젝트를 불러오는 중입니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+      <div class="container contact-layout">
+        <div class="section-heading">
+          <p class="eyebrow">CONTACT</p>
+          <h2>간단한 메시지를 남겨주세요.</h2>
+          <p>입력값을 검증한 뒤 Formspree를 통해 전송합니다.</p>
+        </div>
+
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" autocomplete="name" aria-describedby="name-error">
+            <p class="field-error" id="name-error"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" autocomplete="email" aria-describedby="email-error">
+            <p class="field-error" id="email-error"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="message">메시지</label>
+            <textarea id="message" name="message" rows="6" aria-describedby="message-error"></textarea>
+            <p class="field-error" id="message-error"></p>
+          </div>
+
+          <button type="submit" id="submit_form" class="btn btn-primary submit-btn">보내기</button>
+          <p id="form-message" class="form-status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <p>&copy; 2026 Kim Sangwon. All rights reserved.</p>
+      <a href="https://github.com/bs7703" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+
+  <button id="scrollTopBtn" class="scroll-top-btn" type="button" aria-label="페이지 맨 위로 이동">↑</button>
 </body>
 </html>

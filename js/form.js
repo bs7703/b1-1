@@ -1,63 +1,79 @@
 const contactForm = document.querySelector('#contactForm');
 const statusMsg = document.querySelector('#form-message');
+const submitButton = document.querySelector('#submit_form');
 
-// 유효성 검사 함수
-const validateForm = (name, email, message) => {
-  // 1. 이름 검사: 3자 이상
-  if (name.length < 3) {
-    alert("이름은 최소 3자 이상 입력해주세요.");
-    return false;
+const fields = {
+  name: {
+    input: document.querySelector('#name'),
+    error: document.querySelector('#name-error'),
+    validate: (value) => value.length >= 3 || '이름은 3자 이상 입력해주세요.'
+  },
+  email: {
+    input: document.querySelector('#email'),
+    error: document.querySelector('#email-error'),
+    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || '올바른 이메일 형식이 아닙니다.'
+  },
+  message: {
+    input: document.querySelector('#message'),
+    error: document.querySelector('#message-error'),
+    validate: (value) => value.length >= 10 || '메시지는 10자 이상 입력해주세요.'
   }
-
-  // 2. 이메일 검사: 정규표현식 이용
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert("올바른 이메일 형식이 아닙니다.");
-    return false;
-  }
-
-  // 3. 메시지 검사: 10자 이상
-  if (message.length < 10) {
-    alert("메시지는 최소 10자 이상 입력해주세요.");
-    return false;
-  }
-
-  return true; // 모든 검사 통과
 };
-// 폼 제출 이벤트 리스너
+
+const setFieldState = ({ input, error }, message = '') => {
+  const hasError = Boolean(message);
+  input.setAttribute('aria-invalid', String(hasError));
+  error.textContent = message;
+};
+
+const validateField = (field) => {
+  const value = field.input.value.trim();
+  const result = field.validate(value);
+  const message = result === true ? '' : result;
+  setFieldState(field, message);
+  return !message;
+};
+
+Object.values(fields).forEach((field) => {
+  field.input.addEventListener('input', () => validateField(field));
+});
+
 contactForm.addEventListener('submit', async (event) => {
-  event.preventDefault(); // 기본 제출 동작 방지
+  event.preventDefault();
+  statusMsg.textContent = '';
 
-  // 입력값 가져오기
-  const nameValue = document.querySelector('#name').value.trim();
-  const emailValue = document.querySelector('#email').value.trim();
-  const messageValue = document.querySelector('#message').value.trim();
+  const isValid = Object.values(fields).map(validateField).every(Boolean);
+  if (!isValid) {
+    statusMsg.textContent = '입력 내용을 다시 확인해주세요.';
+    statusMsg.style.color = '#c53b36';
+    return;
+  }
 
-  // 유효성 검사 실행
-  if (validateForm(nameValue, emailValue, messageValue)) {
-    
-    // 검사 통과 시 Formspree로 전송
-    const formData = new FormData(event.target);
+  const formData = new FormData(contactForm);
+  submitButton.disabled = true;
+  submitButton.textContent = '전송 중...';
+  statusMsg.textContent = '메시지를 전송하고 있습니다.';
+  statusMsg.style.color = '';
 
-    try {
-      statusMsg.textContent = "전송 중...";
-      
-      const response = await fetch('https://formspree.io/f/xdeopzkp', {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
+  try {
+    const response = await fetch('https://formspree.io/f/xdeopzkp', {
+      method: 'POST',
+      body: formData,
+      headers: { Accept: 'application/json' }
+    });
 
-      if (response.ok) {
-        statusMsg.style.color = "blue";
-        statusMsg.textContent = "메일이 성공적으로 전송되었습니다!";
-        contactForm.reset(); // 폼 초기화
-      } else {
-        throw new Error("전송 실패");
-      }
-    } catch (error) {
-      statusMsg.style.color = "red";
-      statusMsg.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
-    }
+    if (!response.ok) throw new Error('전송 실패');
+
+    statusMsg.textContent = '메일이 성공적으로 전송되었습니다.';
+    statusMsg.style.color = '#2e8b57';
+    contactForm.reset();
+    Object.values(fields).forEach((field) => setFieldState(field));
+  } catch (error) {
+    console.error(error);
+    statusMsg.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+    statusMsg.style.color = '#c53b36';
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = '보내기';
   }
 });
