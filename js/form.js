@@ -1,5 +1,5 @@
 const contactForm = document.querySelector('#contactForm');
-const statusMsg = document.querySelector('#status');
+const statusMsg = document.querySelector('#form-message');
 
 // 유효성 검사 함수
 const validateForm = (name, email, message) => {
@@ -42,7 +42,7 @@ contactForm.addEventListener('submit', async (event) => {
     try {
       statusMsg.textContent = "전송 중...";
       
-      const response = await fetch(event.target.action, {
+      const response = await fetch('https://formspree.io/f/xdeopzkp', {
         method: 'POST',
         body: formData,
         headers: { 'Accept': 'application/json' }
